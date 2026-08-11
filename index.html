@@ -353,10 +353,14 @@
 
   .dl-count{
     display:inline-flex;align-items:center;gap:9px;
-    margin:0 auto 16px;padding:9px 18px;
+    margin:26px auto 4px;padding:9px 18px;
     background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);
     border-radius:999px;color:#fff;font-size:14px;
   }
+  /* Atribut `hidden` menyembunyikan lewat display:none bawaan browser,
+     yang kalah oleh display:inline-flex di atas — tanpa baris ini pilnya
+     tetap tampil dan memajang angka nol. */
+  .dl-count[hidden]{display:none}
   .dl-count svg{width:16px;height:16px;opacity:.85}
   .dl-count b{font-size:17px;font-weight:800;font-variant-numeric:tabular-nums}
 
@@ -371,7 +375,7 @@
   .download .btn-primary{background:#fff;color:var(--brand-dark);box-shadow:0 10px 26px rgba(0,0,0,.18)}
   .download .btn-ghost{background:transparent;border-color:rgba(255,255,255,.45);color:#fff}
   .download .btn-ghost:hover{border-color:#fff;color:#fff}
-  .meta{margin-top:20px;font-size:13px;color:rgba(255,255,255,.78)}
+  .meta{margin-top:14px;font-size:13px;color:rgba(255,255,255,.78)}
   .meta code{background:rgba(255,255,255,.16);padding:2px 7px;border-radius:5px;font-size:12.5px}
 
   .install{margin-top:34px;display:grid;grid-template-columns:repeat(3,1fr);gap:14px;text-align:left}
