@@ -199,8 +199,50 @@
   }
   .done-rows div::before{content:"\2713";color:#10B981;font-weight:800;margin-right:8px}
 
+
+  /* adegan Admin */
+  .mock-stock{font-size:10.5px;color:var(--muted);background:#F1F2F9;border:1px solid var(--line);border-radius:6px;padding:2px 7px}
+  .price-pair{
+    display:flex;align-items:center;gap:7px;margin-top:8px;
+    font-size:11.5px;color:var(--muted);font-variant-numeric:tabular-nums;
+  }
+  .price-pair b{font-weight:800;color:var(--ink)}
+  .price-pair .arrow{color:var(--brand);font-weight:800}
+  .price-pair .sell b{color:var(--brand)}
+  .note-strip{
+    position:absolute;left:14px;right:14px;bottom:14px;
+    text-align:center;line-height:1.35;
+    background:rgba(79,70,229,.08);border:1px solid rgba(79,70,229,.20);
+    border-radius:10px;padding:8px 11px;font-size:11px;color:var(--brand-dark);font-weight:600;
+  }
+  .note-strip.is-ok{background:rgba(16,185,129,.10);border-color:rgba(16,185,129,.28);color:#046C4E}
+
+  /* adegan Finance */
+  .saldo-row{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+  .saldo{
+    background:#fff;border:1px solid var(--line);border-radius:11px;
+    padding:9px 8px;text-align:center;
+  }
+  .saldo span{display:block;font-size:9.5px;color:var(--muted);letter-spacing:.02em}
+  .saldo b{display:block;font-size:12.5px;margin-top:2px;font-variant-numeric:tabular-nums}
+  .jrnl{background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .jrnl-row{
+    display:grid;grid-template-columns:auto 1fr auto auto;align-items:center;gap:8px;
+    padding:8px 11px;font-size:11.5px;border-bottom:1px solid var(--line);
+  }
+  .jrnl-row:last-child{border-bottom:0}
+  .jrnl-gl{font-size:10px;font-weight:800;color:var(--muted);font-variant-numeric:tabular-nums}
+  .jrnl-nm{color:var(--ink)}
+  .jrnl-amt{font-weight:700;font-variant-numeric:tabular-nums}
+  .jrnl-dc{
+    width:17px;height:17px;border-radius:5px;display:grid;place-items:center;
+    font-size:9.5px;font-weight:800;
+  }
+  .jrnl-dc.is-d{background:rgba(79,70,229,.12);color:var(--brand-dark)}
+  .jrnl-dc.is-k{background:rgba(16,185,129,.14);color:#046C4E}
+
   /* caption + dots */
-  .demo-caption{position:relative;text-align:center;min-height:52px;width:100%}
+  .demo-caption{position:relative;text-align:center;min-height:58px;width:100%}
   .demo-step{
     position:absolute;left:0;right:0;top:0;margin:0;
     font-size:14px;font-weight:600;color:var(--muted);
@@ -347,13 +389,13 @@
     <div class="demo">
       <div class="phone" aria-hidden="true">
         <div class="phone-bar">
-          <b>Meja A-04</b>
-          <span style="margin-left:auto;font-size:12px;opacity:.85">Kaata Resto</span>
+          <b id="bar-title">Meja A-04</b>
+          <span id="bar-tag" style="margin-left:auto;font-size:12px;opacity:.85">Kaata Resto</span>
         </div>
 
         <div class="phone-screen">
           <!-- 1. Pilih menu -->
-          <div class="scene is-active" data-scene="0">
+          <div class="scene is-active" data-scene="0" data-bar="Meja A-04" data-tag="Kaata Resto">
             <div class="mock-card">
               <div class="mock-row">
                 <span class="mock-name">Nasi Goreng</span>
@@ -382,7 +424,7 @@
           </div>
 
           <!-- 2. Keranjang -->
-          <div class="scene" data-scene="1">
+          <div class="scene" data-scene="1" data-bar="Keranjang" data-tag="Meja A-04">
             <div class="scene-title">Keranjang</div>
             <div class="mock-card">
               <div class="mock-row">
@@ -411,7 +453,7 @@
           </div>
 
           <!-- 3. Bayar QRIS -->
-          <div class="scene scene-pay" data-scene="2">
+          <div class="scene scene-pay" data-scene="2" data-bar="Pembayaran" data-tag="Meja A-04">
             <div class="scene-title">Scan untuk bayar</div>
             <div class="qr-wrap">
               <svg class="qr" viewBox="0 0 21 21" shape-rendering="crispEdges" role="img" aria-label="Contoh kode QR"></svg>
@@ -422,7 +464,7 @@
           </div>
 
           <!-- 4. Berhasil -->
-          <div class="scene scene-done" data-scene="3">
+          <div class="scene scene-done" data-scene="3" data-bar="Selesai" data-tag="Meja A-04">
             <div class="tick">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12 6 6L20 6"/></svg>
             </div>
@@ -434,6 +476,82 @@
               <div><span>Masuk jurnal GL otomatis</span></div>
             </div>
           </div>
+
+          <!-- 5. Admin — kelola produk & harga -->
+          <div class="scene scene-admin" data-scene="4" data-bar="Kelola Produk" data-tag="Admin">
+            <div class="scene-title">Menu &amp; harga</div>
+            <div class="mock-card">
+              <div class="mock-row">
+                <span class="mock-name">Nasi Goreng</span>
+                <span class="mock-stock">stok 179</span>
+              </div>
+              <div class="price-pair">
+                <span>Original <b>25.000</b></span>
+                <span class="arrow">&rarr;</span>
+                <span class="sell">Jual <b>27.750</b></span>
+              </div>
+            </div>
+            <div class="mock-card">
+              <div class="mock-row">
+                <span class="mock-name">Bakmi Goreng Sapi</span>
+                <span class="mock-stock">stok 495</span>
+              </div>
+              <div class="price-pair">
+                <span>Original <b>35.000</b></span>
+                <span class="arrow">&rarr;</span>
+                <span class="sell">Jual <b>38.850</b></span>
+              </div>
+            </div>
+            <div class="mock-card">
+              <div class="mock-row">
+                <span class="mock-name">Es Teh Manis</span>
+                <span class="mock-stock">stok 180</span>
+              </div>
+              <div class="price-pair">
+                <span>Original <b>5.000</b></span>
+                <span class="arrow">&rarr;</span>
+                <span class="sell">Jual <b>5.550</b></span>
+              </div>
+            </div>
+            <div class="note-strip">Harga jual mengikuti PPN 11% &mdash; tidak dihitung tangan</div>
+          </div>
+
+          <!-- 6. Finance — saldo & jurnal GL -->
+          <div class="scene scene-finance" data-scene="5" data-bar="Jurnal GL" data-tag="Finance">
+            <div class="saldo-row">
+              <div class="saldo"><span>Penghasilan</span><b>64.103</b></div>
+              <div class="saldo"><span>Petty Cash</span><b>250.000</b></div>
+              <div class="saldo"><span>Pengeluaran</span><b>38.000</b></div>
+            </div>
+            <div class="scene-title" style="margin-top:12px">Pesanan #A1B2C3D4</div>
+            <div class="jrnl">
+              <div class="jrnl-row">
+                <span class="jrnl-gl">1&#8209;1100</span>
+                <span class="jrnl-nm">Kas QRIS</span>
+                <span class="jrnl-amt">64.103</span>
+                <span class="jrnl-dc is-d">D</span>
+              </div>
+              <div class="jrnl-row">
+                <span class="jrnl-gl">4&#8209;1000</span>
+                <span class="jrnl-nm">Penjualan</span>
+                <span class="jrnl-amt">55.000</span>
+                <span class="jrnl-dc is-k">K</span>
+              </div>
+              <div class="jrnl-row">
+                <span class="jrnl-gl">2&#8209;2100</span>
+                <span class="jrnl-nm">PPN Keluaran</span>
+                <span class="jrnl-amt">6.353</span>
+                <span class="jrnl-dc is-k">K</span>
+              </div>
+              <div class="jrnl-row">
+                <span class="jrnl-gl">2&#8209;2200</span>
+                <span class="jrnl-nm">Biaya Service</span>
+                <span class="jrnl-amt">2.750</span>
+                <span class="jrnl-dc is-k">K</span>
+              </div>
+            </div>
+            <div class="note-strip is-ok">Debit = Kredit &mdash; seimbang tanpa input manual</div>
+          </div>
         </div>
       </div>
 
@@ -442,8 +560,10 @@
         <p class="demo-step" data-step="1">Satu menu, dua level pedas — tetap terpisah</p>
         <p class="demo-step" data-step="2">Bayar QRIS tanpa memanggil pelayan</p>
         <p class="demo-step" data-step="3">Lunas, dapur jalan, pembukuan beres</p>
+        <p class="demo-step" data-step="4">Admin cukup isi harga bersih, PPN dihitung sendiri</p>
+        <p class="demo-step" data-step="5">Finance terima jurnal yang sudah seimbang</p>
         <div class="dots">
-          <span class="dot-i is-on"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span>
+          <span class="dot-i is-on"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span>
         </div>
       </div>
     </div>
@@ -778,6 +898,8 @@
     var steps  = [].slice.call(document.querySelectorAll(".demo-step"));
     var dots   = [].slice.call(document.querySelectorAll(".dot-i"));
     var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var barTitle = document.getElementById("bar-title");
+    var barTag   = document.getElementById("bar-tag");
 
     var SCENE_MS = 2600;
     var current = -1;
@@ -787,6 +909,12 @@
       if(i === current) return;
       current = i;
       scenes.forEach(function(el,n){ el.classList.toggle("is-active", n===i) });
+
+      // Bar atas ikut berpindah konteks — tanpa ini adegan Admin dan
+      // Finance masih bertuliskan nomor meja, seolah dilihat customer.
+      var s = scenes[i];
+      if(s && barTitle && s.dataset.bar){ barTitle.textContent = s.dataset.bar }
+      if(s && barTag && s.dataset.tag){ barTag.textContent = s.dataset.tag }
       steps.forEach(function(el,n){ el.classList.toggle("is-active", n===i) });
       dots.forEach(function(el,n){
         el.classList.toggle("is-on", n===i);
