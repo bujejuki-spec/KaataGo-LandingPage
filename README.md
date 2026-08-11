@@ -33,17 +33,35 @@ statis mana pun:
 - **GitHub Pages** — Settings → Pages → deploy dari branch `main`
 - **cPanel / shared hosting** — upload isi folder ke `public_html`
 
-## Dua nilai yang perlu diisi
+## Yang perlu diisi sekali
 
-Keduanya ada di blok `<script>` paling bawah `index.html`:
+Ada di blok `<script>` paling bawah `index.html`:
 
 | Variabel | Fungsi |
 | --- | --- |
-| `APK_URL` | Alamat unduh APK. Untuk Google Drive gunakan bentuk `drive.usercontent.google.com/download?id=<ID>&export=download&confirm=t` — link `/view` hanya membuka pratinjau, dan `uc?export=download` masih menyisipkan halaman peringatan virus untuk file sebesar ini. |
 | `WA_NUMBER` | Nomor WhatsApp tim sales untuk tombol "Tanya harga & promo". Format internasional tanpa `+`, contoh `6281234567890`. Kalau kosong, tombolnya memberi tahu bahwa nomornya belum dipasang. |
 
-Nomor versi APK ditulis manual di bagian download (`Versi <code>…</code>`) —
-perbarui saat merilis versi baru.
+`APK_URL` tidak perlu disentuh: ia menunjuk ke
+`releases/latest/download/KaataGo.apk`, yang selalu diarahkan GitHub ke
+rilis terbaru.
+
+## Rilis versi baru
+
+Jangan mengedit nomor versi di halaman ini dengan tangan — akan tertimpa.
+Semuanya dikerjakan satu perintah dari repo aplikasi:
+
+```bash
+scripts/release.sh
+```
+
+Perintah itu membangun APK, menerbitkannya sebagai GitHub Release di repo
+ini (rilis lama dihapus, jadi hanya yang terbaru tersisa), menulis ulang
+nomor versi dan ukuran di `index.html`, lalu commit dan push — sehingga
+halaman ini dan APK-nya tidak pernah bisa saling mendahului.
+
+APK sengaja **tidak** di-commit ke repo. Git menyimpan setiap versi file
+selamanya, jadi APK yang "dihapus" tetap tinggal di riwayat dan membuat
+repo membengkak permanen. Aset Release disimpan di luar riwayat Git.
 
 ## Catatan
 

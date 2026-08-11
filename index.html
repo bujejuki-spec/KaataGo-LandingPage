@@ -858,7 +858,10 @@
         <a class="btn btn-ghost" href="#faq">Baca dulu FAQ</a>
       </div>
 
-      <p class="meta">Versi <code>1.28.4</code> · Android 6.0 ke atas · ± 78 MB</p>
+      <!-- Nomor versi dan ukuran ditulis ulang oleh scripts/release.sh di
+           repo aplikasi setiap kali rilis, jadi jangan diedit tangan —
+           suntingannya akan tertimpa pada rilis berikutnya. -->
+      <p class="meta">Versi <code id="app-version">1.28.4</code> · Android 6.0 ke atas · <span id="app-size">± 78 MB</span></p>
 
       <div class="install">
         <div>
@@ -945,18 +948,14 @@
 </footer>
 
 <script>
-  // ── Ganti ID di baris ini tiap kali APK-nya diperbarui ──
-  // Ambil ID di antara "/d/" dan "/view" pada link berbagi Google Drive.
+  // Alamat unduh yang tidak pernah berubah: GitHub selalu mengarahkannya
+  // ke rilis terbaru, jadi halaman ini tidak perlu disentuh saat versi
+  // baru keluar — cukup nomor versinya, yang ditulis oleh skrip rilis.
   //
-  // Bentuk URL-nya dipilih dengan sengaja. Link "/view" hanya membuka
-  // halaman pratinjau, dan Drive tidak bisa memratinjau APK. Bentuk
-  // "uc?export=download" pun masih menyisipkan halaman peringatan "tidak
-  // dapat memindai virus" untuk file sebesar ini. Alamat di bawah dengan
-  // confirm=t melewati keduanya dan langsung mengirim file-nya.
-  //
-  // Syaratnya file di Drive harus dibagikan ke "siapa saja yang memiliki
-  // link", kalau tidak yang terunduh justru halaman login.
-  var APK_URL = "https://drive.usercontent.google.com/download?id=1L8mKmwPT4gcEefB1Goq2Pei9KL2HRElR&export=download&confirm=t";
+  // Sebelumnya ini mengarah ke Google Drive, yang untuk file sebesar APK
+  // selalu menyisipkan halaman peringatan "tidak dapat memindai virus"
+  // lebih dulu. GitHub mengirimkan filenya langsung.
+  var APK_URL = "https://github.com/bujejuki-spec/KaataGo-LandingPage/releases/latest/download/KaataGo.apk";
 
 
   // ── QR palsu ──────────────────────────────────────────────────────────
