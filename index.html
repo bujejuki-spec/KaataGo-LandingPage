@@ -208,7 +208,8 @@
   }
   .demo-step.is-active{opacity:1;transform:none}
   .dots{position:absolute;left:0;right:0;top:30px;display:flex;gap:7px;justify-content:center}
-  .dot-i{width:7px;height:7px;border-radius:50%;background:#CFD1E4;transition:background .3s ease, width .3s ease}
+  .dot-i{width:7px;height:7px;border-radius:50%;background:#CFD1E4;border:0;padding:0;cursor:pointer;transition:background .3s ease, width .3s ease}
+  .dot-i:focus-visible{outline:2px solid var(--brand);outline-offset:3px}
   .dot-i.is-on{background:var(--brand);width:20px;border-radius:999px}
 
   @media (prefers-reduced-motion:reduce){
@@ -765,10 +766,10 @@
     svg.innerHTML = out;
   })();
 
-  // ── Demo HP yang bergulir mengikuti scroll ────────────────────────────
-  // Adegannya digerakkan oleh posisi HP di layar, bukan timer: pengunjung
-  // memegang kendali, dan alurnya terbaca sebagai satu cerita utuh —
-  // pilih menu, keranjang, bayar, lunas — sambil mereka menggulir.
+  // ── Demo HP yang berjalan sendiri ─────────────────────────────────────
+  // Empat adegan bergilir otomatis — pilih menu, keranjang, bayar, lunas —
+  // supaya pengunjung yang cuma diam di hero tetap melihat alur lengkapnya
+  // tanpa harus menggulir. Titik di bawahnya jadi kendali manual.
   (function phoneDemo(){
     var phone = document.querySelector(".phone-screen");
     if(!phone) return;
@@ -778,48 +779,60 @@
     var dots   = [].slice.call(document.querySelectorAll(".dot-i"));
     var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
+    var SCENE_MS = 2600;
     var current = -1;
+    var timer = null;
+
     function show(i){
       if(i === current) return;
       current = i;
       scenes.forEach(function(el,n){ el.classList.toggle("is-active", n===i) });
       steps.forEach(function(el,n){ el.classList.toggle("is-active", n===i) });
-      dots.forEach(function(el,n){ el.classList.toggle("is-on", n===i) });
+      dots.forEach(function(el,n){
+        el.classList.toggle("is-on", n===i);
+        el.setAttribute("aria-selected", n===i ? "true" : "false");
+      });
     }
     show(0);
 
-    // Tanpa gerakan: tampilkan adegan pertama saja dan berhenti di situ.
+    // Tanpa gerakan: berhenti di adegan pertama.
     if(reduced) return;
 
-    var ticking = false;
-    function update(){
-      ticking = false;
-      var r = phone.getBoundingClientRect();
-      var vh = window.innerHeight || document.documentElement.clientHeight;
-
-      // 0 saat HP baru masuk penuh dari bawah, 1 saat hampir keluar di
-      // atas. Rentang inilah yang dibagi rata ke empat adegan.
-      var travel = vh + r.height;
-      var p = (vh - r.top) / travel;
-      p = Math.max(0, Math.min(1, p));
-
-      // Sisi-sisinya dipangkas supaya adegan pertama dan terakhir sempat
-      // dilihat, bukan cuma berkelebat di ujung layar.
-      var t = (p - 0.18) / 0.62;
-      t = Math.max(0, Math.min(0.9999, t));
-
-      show(Math.floor(t * scenes.length));
+    function stop(){ if(timer){ clearInterval(timer); timer = null } }
+    function play(){
+      if(timer) return;
+      timer = setInterval(function(){ show((current + 1) % scenes.length) }, SCENE_MS);
     }
+    // Menunda satu putaran penuh setelah pengunjung menyentuh titik, biar
+    // adegan pilihannya tidak langsung tergeser sedetik kemudian.
+    function restart(){ stop(); play() }
 
-    function onScroll(){
-      if(ticking) return;
-      ticking = true;
-      requestAnimationFrame(update);
-    }
+    // Berjalan seketika dan terus-menerus. Sempat dicoba dijeda lewat
+    // IntersectionObserver saat HP keluar layar, tapi callback pertamanya
+    // bisa datang sebelum layout selesai — dilaporkan "belum terlihat",
+    // animasinya dimatikan, dan pada sebagian browser tidak pernah
+    // dilaporkan lagi. Menggilir empat kelas tiap 2,6 detik terlalu murah
+    // untuk dibayar dengan risiko diam total.
+    play();
 
-    window.addEventListener("scroll", onScroll, {passive:true});
-    window.addEventListener("resize", onScroll);
-    update();
+    // Tab yang disembunyikan tidak menjalankan animasi CSS dengan benar;
+    // menghentikan timer menjaga adegan tetap selaras saat kembali.
+    document.addEventListener("visibilitychange", function(){
+      document.hidden ? stop() : play();
+    });
+
+    // Titik-titiknya sekalian jadi kendali manual, buat yang ingin
+    // berlama-lama di satu adegan.
+    dots.forEach(function(dot, i){
+      dot.setAttribute("role", "tab");
+      dot.setAttribute("tabindex", "0");
+      dot.setAttribute("aria-label", "Adegan " + (i+1));
+      function pick(){ show(i); restart() }
+      dot.addEventListener("click", pick);
+      dot.addEventListener("keydown", function(e){
+        if(e.key === "Enter" || e.key === " "){ e.preventDefault(); pick() }
+      });
+    });
   })();
 
   (function () {
