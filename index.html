@@ -351,6 +351,15 @@
   .step h3{margin:0 0 6px;font-size:15.5px}
   .step p{margin:0;color:var(--muted);font-size:14px}
 
+  .dl-count{
+    display:inline-flex;align-items:center;gap:9px;
+    margin:0 auto 16px;padding:9px 18px;
+    background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);
+    border-radius:999px;color:#fff;font-size:14px;
+  }
+  .dl-count svg{width:16px;height:16px;opacity:.85}
+  .dl-count b{font-size:17px;font-weight:800;font-variant-numeric:tabular-nums}
+
   /* download */
   .download{
     background:linear-gradient(135deg,var(--brand),var(--brand-dark));
@@ -861,6 +870,14 @@
       <!-- Nomor versi dan ukuran ditulis ulang oleh scripts/release.sh di
            repo aplikasi setiap kali rilis, jadi jangan diedit tangan —
            suntingannya akan tertimpa pada rilis berikutnya. -->
+      <!-- Disembunyikan sampai angkanya benar-benar diterima. Penghitung
+           yang menampilkan "0" atau garis strip justru melemahkan pesan
+           yang mau dibawanya. -->
+      <div class="dl-count" id="dl-count" hidden>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="m7 12 5 5 5-5"/><path d="M5 21h14"/></svg>
+        <span><b id="dl-number">0</b> kali diunduh</span>
+      </div>
+
       <p class="meta">Versi <code id="app-version">1.30.0</code> · Android 6.0 ke atas · <span id="app-size">± 78 MB</span></p>
 
       <div class="install">
@@ -957,6 +974,56 @@
   // lebih dulu. GitHub mengirimkan filenya langsung.
   var APK_URL = "https://github.com/bujejuki-spec/KaataGo-LandingPage/releases/latest/download/KaataGo.apk";
 
+
+
+  // ── Penghitung unduhan ────────────────────────────────────────────────
+  // Dijumlahkan dari dua sumber: unduhan rilis yang sedang berjalan
+  // (langsung dari API GitHub) ditambah saldo rilis-rilis sebelumnya yang
+  // sudah dipanen ke downloads.json. Angka unduhan menempel pada rilisnya
+  // dan ikut terhapus bersamanya, jadi tanpa saldo itu penghitungnya
+  // kembali nol tiap kali versi baru terbit.
+  (function downloadCount(){
+    var box = document.getElementById("dl-count");
+    var out = document.getElementById("dl-number");
+    if(!box || !out) return;
+
+    function render(total){
+      if(total <= 0) return;            // biarkan tersembunyi
+      box.hidden = false;
+
+      // Dihitung naik dari nol: angka yang bergerak menarik mata ke
+      // sesuatu yang kalau diam saja gampang terlewat.
+      var start = performance.now(), dur = 900;
+      (function step(now){
+        var t = Math.min(1, (now - start) / dur);
+        var eased = 1 - Math.pow(1 - t, 3);
+        out.textContent = Math.round(total * eased).toLocaleString("id-ID");
+        if(t < 1) requestAnimationFrame(step);
+      })(start);
+    }
+
+    var carried = 0, live = 0, pending = 2;
+    function done(){ if(--pending === 0) render(carried + live) }
+
+    fetch("downloads.json", {cache: "no-store"})
+      .then(function(r){ return r.ok ? r.json() : {} })
+      .then(function(d){ carried = Number(d.carried) || 0 })
+      .catch(function(){})
+      .then(done);
+
+    fetch("https://api.github.com/repos/bujejuki-spec/KaataGo-LandingPage/releases/latest")
+      .then(function(r){ return r.ok ? r.json() : {} })
+      .then(function(d){
+        live = (d.assets || []).reduce(function(sum, a){
+          return sum + (a.download_count || 0);
+        }, 0);
+      })
+      // Kuota API GitHub untuk pengunjung anonim terbatas per jam. Kalau
+      // habis, saldo yang tersimpan tetap tampil — lebih baik angka yang
+      // sedikit tertinggal daripada tidak ada angka sama sekali.
+      .catch(function(){})
+      .then(done);
+  })();
 
   // ── QR palsu ──────────────────────────────────────────────────────────
   // Digambar, bukan gambar asli: sebuah QR sungguhan yang bisa dipindai
