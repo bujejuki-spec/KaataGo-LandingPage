@@ -241,6 +241,48 @@
   .jrnl-dc.is-d{background:rgba(79,70,229,.12);color:var(--brand-dark)}
   .jrnl-dc.is-k{background:rgba(16,185,129,.14);color:#046C4E}
 
+
+  /* adegan Chef */
+  .chef-ref{font-style:normal;font-weight:600;font-size:10.5px;color:var(--muted);margin-left:5px}
+  .chef-items{display:flex;flex-wrap:wrap;gap:6px;margin-top:7px;font-size:11.5px;color:var(--muted)}
+  .chef-note{font-style:italic}
+  .st{
+    font-size:10px;font-weight:800;letter-spacing:.03em;
+    padding:3px 9px;border-radius:999px;white-space:nowrap;
+  }
+  .st-new{background:rgba(245,158,11,.16);color:#92400E}
+  .st-cook{background:rgba(79,70,229,.14);color:var(--brand-dark)}
+  .st-ready{background:rgba(16,185,129,.16);color:#046C4E}
+
+  /* Status yang benar-benar bergerak, bukan sekadar dua label sejajar —
+     inti fitur chef adalah memajukan pesanan, jadi demonya harus
+     memperlihatkan perpindahannya. */
+  .pill-status{position:relative;display:inline-grid}
+  .pill-status .st{grid-area:1/1}
+  .chef-card .st-ready{opacity:0}
+  .scene-chef.is-active .chef-card .st-cook{animation:st-out .5s ease 1.15s forwards}
+  .scene-chef.is-active .chef-card .st-ready{animation:st-in .5s ease 1.15s forwards}
+  @keyframes st-out{to{opacity:0;transform:translateY(-6px)}}
+  @keyframes st-in{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  /* adegan Saldo */
+  .saldo-hero{
+    background:linear-gradient(135deg,var(--brand),var(--brand-dark));
+    color:#fff;border-radius:14px;padding:14px 16px;
+  }
+  .saldo-hero span{display:block;font-size:10.5px;opacity:.82;letter-spacing:.04em;text-transform:uppercase}
+  .saldo-hero b{display:block;font-size:23px;font-weight:800;letter-spacing:-.02em;margin-top:3px;font-variant-numeric:tabular-nums}
+  .saldo-hero em{display:block;font-size:10.5px;opacity:.82;font-style:normal;margin-top:2px}
+  .split{background:#fff;border:1px solid var(--line);border-radius:12px;margin-top:9px;overflow:hidden}
+  .split-row{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:7px 12px;font-size:11.5px;border-bottom:1px solid var(--line);
+  }
+  .split-row:last-child{border-bottom:0}
+  .split-nm{color:var(--muted)}
+  .split-amt{font-weight:700;font-variant-numeric:tabular-nums}
+  .scene-saldo .saldo-row{grid-template-columns:repeat(2,1fr)}
+
   /* caption + dots */
   .demo-caption{position:relative;text-align:center;min-height:58px;width:100%}
   .demo-step{
@@ -257,6 +299,8 @@
   @media (prefers-reduced-motion:reduce){
     .scene{transition:none}
     .qr-scan{display:none}
+    .scene-chef .chef-card .st-cook{display:none}
+    .scene-chef .chef-card .st-ready{opacity:1}
   }
 
   /* ---------- sections ---------- */
@@ -477,8 +521,38 @@
             </div>
           </div>
 
-          <!-- 5. Admin — kelola produk & harga -->
-          <div class="scene scene-admin" data-scene="4" data-bar="Kelola Produk" data-tag="Admin">
+          <!-- Chef — menggerakkan status pesanan -->
+          <div class="scene scene-chef" data-scene="4" data-bar="Pesanan Masuk" data-tag="Chef">
+            <div class="scene-title">Antrean dapur</div>
+
+            <div class="mock-card chef-card is-moving">
+              <div class="mock-row">
+                <span class="mock-name">Meja A-04 <em class="chef-ref">#A1B2C3D4</em></span>
+                <span class="pill-status">
+                  <span class="st st-cook">Dimasak</span>
+                  <span class="st st-ready">Siap</span>
+                </span>
+              </div>
+              <div class="chef-items">
+                <span>2&times; Nasi Goreng</span>
+                <span class="chef-note">1 pedas &middot; 1 tidak pedas</span>
+              </div>
+              <div class="chef-items"><span>1&times; Es Teh Manis</span></div>
+            </div>
+
+            <div class="mock-card">
+              <div class="mock-row">
+                <span class="mock-name">Meja B-02 <em class="chef-ref">#7F30E1A9</em></span>
+                <span class="st st-new">Baru</span>
+              </div>
+              <div class="chef-items"><span>1&times; Bakmi Goreng Sapi</span></div>
+            </div>
+
+            <div class="note-strip">Sekali tap: Baru &rarr; Dimasak &rarr; Siap</div>
+          </div>
+
+          <!-- Admin — kelola produk & harga -->
+          <div class="scene scene-admin" data-scene="5" data-bar="Kelola Produk" data-tag="Admin">
             <div class="scene-title">Menu &amp; harga</div>
             <div class="mock-card">
               <div class="mock-row">
@@ -516,8 +590,37 @@
             <div class="note-strip">Harga jual mengikuti PPN 11% &mdash; tidak dihitung tangan</div>
           </div>
 
-          <!-- 6. Finance — saldo & jurnal GL -->
-          <div class="scene scene-finance" data-scene="5" data-bar="Jurnal GL" data-tag="Finance">
+          <!-- Finance — saldo pendapatan -->
+          <div class="scene scene-saldo" data-scene="6" data-bar="Saldo &amp; Pendapatan" data-tag="Finance">
+            <div class="scene-title">Saldo penghasilan</div>
+            <div class="saldo-hero">
+              <span>Total hari ini</span>
+              <b>Rp 2.847.650</b>
+              <em>dari 43 transaksi</em>
+            </div>
+            <div class="split">
+              <div class="split-row">
+                <span class="split-nm">Tunai</span>
+                <span class="split-amt">980.000</span>
+              </div>
+              <div class="split-row">
+                <span class="split-nm">QRIS</span>
+                <span class="split-amt">1.512.550</span>
+              </div>
+              <div class="split-row">
+                <span class="split-nm">Transfer</span>
+                <span class="split-amt">355.100</span>
+              </div>
+            </div>
+            <div class="saldo-row" style="margin-top:9px">
+              <div class="saldo"><span>Petty Cash</span><b>250.000</b></div>
+              <div class="saldo"><span>Pengeluaran</span><b>38.000</b></div>
+            </div>
+            <div class="note-strip">Tiap metode bayar punya akun GL sendiri</div>
+          </div>
+
+          <!-- Finance — jurnal GL -->
+          <div class="scene scene-finance" data-scene="7" data-bar="Jurnal GL" data-tag="Finance">
             <div class="saldo-row">
               <div class="saldo"><span>Penghasilan</span><b>64.103</b></div>
               <div class="saldo"><span>Petty Cash</span><b>250.000</b></div>
@@ -560,10 +663,12 @@
         <p class="demo-step" data-step="1">Satu menu, dua level pedas — tetap terpisah</p>
         <p class="demo-step" data-step="2">Bayar QRIS tanpa memanggil pelayan</p>
         <p class="demo-step" data-step="3">Lunas, dapur jalan, pembukuan beres</p>
-        <p class="demo-step" data-step="4">Admin cukup isi harga bersih, PPN dihitung sendiri</p>
-        <p class="demo-step" data-step="5">Finance terima jurnal yang sudah seimbang</p>
+        <p class="demo-step" data-step="4">Dapur menggerakkan status pesanan sekali tap</p>
+        <p class="demo-step" data-step="5">Admin cukup isi harga bersih, PPN dihitung sendiri</p>
+        <p class="demo-step" data-step="6">Pendapatan terpisah rapi per metode bayar</p>
+        <p class="demo-step" data-step="7">Finance terima jurnal yang sudah seimbang</p>
         <div class="dots">
-          <span class="dot-i is-on"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span>
+          <span class="dot-i is-on"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span>
         </div>
       </div>
     </div>
@@ -901,7 +1006,7 @@
     var barTitle = document.getElementById("bar-title");
     var barTag   = document.getElementById("bar-tag");
 
-    var SCENE_MS = 2600;
+    var SCENE_MS = 2400;
     var current = -1;
     var timer = null;
 
