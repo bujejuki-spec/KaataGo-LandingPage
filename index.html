@@ -361,10 +361,12 @@
   /* Mode tablet: bingkainya melebar dan keranjang jadi panel samping,
      persis seperti aplikasinya di monitor kasir. */
   .phone{transition:width .35s ease}
-  .phone.is-tablet{width:430px;border-radius:26px;border-width:12px}
-  .phone.is-tablet .phone-screen{height:330px}
+  .phone.is-tablet{width:496px;border-radius:26px;border-width:12px}
   .tablet-cart{display:none}
-  .phone.is-tablet .scene-menu{display:flex;gap:10px}
+  /* flex-direction disebut tegas: .scene sekarang kolom flex demi
+     mendorong strip catatan ke bawah, dan tanpa ini adegan menu ikut
+     menumpuk ke bawah alih-alih bersanding dengan keranjang. */
+  .phone.is-tablet .scene-menu{display:flex;flex-direction:row;gap:10px}
   .phone.is-tablet .scene-menu .menu-col{flex:1;min-width:0}
   .phone.is-tablet .tablet-cart{
     display:flex;flex-direction:column;width:150px;flex:none;
