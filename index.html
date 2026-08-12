@@ -283,6 +283,104 @@
   .split-amt{font-weight:700;font-variant-numeric:tabular-nums}
   .scene-saldo .saldo-row{grid-template-columns:repeat(2,1fr)}
 
+
+  /* adegan Setor & Konfirmasi */
+  .cash-hero{
+    background:linear-gradient(135deg,#0EA5E9,#0369A1);
+    color:#fff;border-radius:14px;padding:13px 15px;
+  }
+  .cash-hero span{display:block;font-size:10.5px;opacity:.85;letter-spacing:.04em;text-transform:uppercase}
+  .cash-hero b{display:block;font-size:21px;font-weight:800;margin-top:2px;font-variant-numeric:tabular-nums}
+  .proof-strip{
+    display:flex;align-items:center;gap:6px;margin-top:8px;
+    background:#F1F2F9;border:1px solid var(--line);border-radius:8px;
+    padding:5px 9px;font-size:10.5px;color:var(--muted);
+  }
+  .warn-box{
+    display:flex;gap:8px;align-items:flex-start;
+    background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.35);
+    border-radius:11px;padding:10px 12px;font-size:11.5px;color:#92400E;line-height:1.4;
+  }
+  .warn-ico{
+    flex:none;width:17px;height:17px;border-radius:50%;background:#F59E0B;color:#fff;
+    font-weight:800;font-size:11px;display:grid;place-items:center;
+  }
+  .flowline{display:flex;align-items:center;gap:8px;margin:12px 0}
+  .flow-node{
+    flex:1;text-align:center;font-size:10.5px;font-weight:700;
+    background:#fff;border:1px solid var(--line);border-radius:9px;padding:8px 4px;color:var(--muted);
+  }
+  .flow-node.is-target{
+    border-color:rgba(16,185,129,.45);background:rgba(16,185,129,.10);color:#046C4E;
+  }
+  .flow-arrow{color:var(--brand);font-weight:800}
+  /* Uangnya terlihat berpindah, bukan sekadar dua kotak berdampingan —
+     itulah inti alur approval-nya. */
+  .scene-konfirmasi.is-active .flow-node.is-target{animation:land .6s ease .5s both}
+  @keyframes land{
+    0%{transform:scale(.9);opacity:.35}
+    60%{transform:scale(1.04)}
+    100%{transform:scale(1);opacity:1}
+  }
+  .scene-konfirmasi.is-active .flow-arrow{animation:nudge .9s ease .3s 2}
+  @keyframes nudge{0%,100%{transform:translateX(0)}50%{transform:translateX(4px)}}
+
+  /* Notifikasi mengambang */
+  .notif-pop{
+    position:absolute;left:14px;right:14px;top:12px;z-index:3;
+    display:flex;align-items:center;gap:10px;
+    background:#fff;border:1px solid var(--line);border-radius:12px;
+    padding:9px 12px;box-shadow:0 8px 20px rgba(20,21,42,.16);
+    opacity:0;transform:translateY(-14px);
+  }
+  .scene.is-active .notif-pop{animation:notif-in .55s cubic-bezier(.2,.9,.3,1.2) .35s forwards}
+  @keyframes notif-in{to{opacity:1;transform:translateY(0)}}
+  .notif-ico{font-size:16px}
+  .notif-pop b{display:block;font-size:12px}
+  .notif-pop em{display:block;font-size:10.5px;font-style:normal;color:var(--muted)}
+
+  /* Pemilih perangkat */
+  .device-switch{
+    display:inline-flex;gap:4px;padding:4px;margin-bottom:14px;
+    background:rgba(79,70,229,.08);border-radius:999px;
+  }
+  .device-switch button{
+    border:0;background:transparent;cursor:pointer;
+    padding:6px 16px;border-radius:999px;
+    font-size:12.5px;font-weight:700;color:var(--muted);
+    font-family:inherit;transition:background .2s ease, color .2s ease;
+  }
+  .device-switch button.is-on{background:var(--brand);color:#fff}
+  .device-switch button:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+
+  /* Mode tablet: bingkainya melebar dan keranjang jadi panel samping,
+     persis seperti aplikasinya di monitor kasir. */
+  .phone{transition:width .35s ease}
+  .phone.is-tablet{width:430px;border-radius:26px;border-width:12px}
+  .phone.is-tablet .phone-screen{height:330px}
+  .tablet-cart{display:none}
+  .phone.is-tablet .scene-menu{display:flex;gap:10px}
+  .phone.is-tablet .scene-menu .menu-col{flex:1;min-width:0}
+  .phone.is-tablet .tablet-cart{
+    display:flex;flex-direction:column;width:150px;flex:none;
+    background:#fff;border:1px solid var(--line);border-radius:12px;padding:10px;
+  }
+  .phone.is-tablet .mock-bar{display:none}
+  .tablet-cart h4{margin:0 0 7px;font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+  .tc-row{display:flex;justify-content:space-between;font-size:10.5px;margin-bottom:5px}
+  .tc-total{margin-top:auto;border-top:1px solid var(--line);padding-top:8px}
+  .tc-total b{display:block;font-size:14px;font-variant-numeric:tabular-nums}
+  .tc-btn{
+    margin-top:8px;background:var(--brand);color:#fff;border-radius:8px;
+    text-align:center;padding:7px;font-size:11px;font-weight:800;
+  }
+  @media (max-width:520px){
+    .phone.is-tablet{width:290px}
+    .phone.is-tablet .scene-menu{display:block}
+    .phone.is-tablet .tablet-cart{display:none}
+    .phone.is-tablet .mock-bar{display:flex}
+  }
+
   /* caption + dots */
   .demo-caption{position:relative;text-align:center;min-height:58px;width:100%}
   .demo-step{
@@ -444,7 +542,11 @@
     </div>
 
     <div class="demo">
-      <div class="phone" aria-hidden="true">
+      <div class="device-switch" role="group" aria-label="Pilih tampilan perangkat">
+        <button type="button" id="mode-hp" class="is-on">HP</button>
+        <button type="button" id="mode-tab">Tablet</button>
+      </div>
+      <div class="phone" id="device-frame" aria-hidden="true">
         <div class="phone-bar">
           <b id="bar-title">Meja A-04</b>
           <span id="bar-tag" style="margin-left:auto;font-size:12px;opacity:.85">Kaata Resto</span>
@@ -452,7 +554,8 @@
 
         <div class="phone-screen">
           <!-- 1. Pilih menu -->
-          <div class="scene is-active" data-scene="0" data-bar="Meja A-04" data-tag="Kaata Resto">
+          <div class="scene scene-menu is-active" data-scene="0" data-bar="Meja A-04" data-tag="Kaata Resto">
+            <div class="menu-col">
             <div class="mock-card">
               <div class="mock-row">
                 <span class="mock-name">Nasi Goreng</span>
@@ -477,6 +580,21 @@
             <div class="mock-bar">
               <span>3 item</span>
               <span class="mock-bar-cta">Keranjang</span>
+            </div>
+            </div>
+            <!-- Hanya tampil di mode tablet: di layar lebar keranjang
+                 jadi panel tetap, jadi kasir bisa mencocokkan pesanan
+                 sambil pelanggan masih membacakannya. -->
+            <div class="tablet-cart">
+              <h4>Keranjang</h4>
+              <div class="tc-row"><span>Nasi Goreng</span><span>27.750</span></div>
+              <div class="tc-row"><span>Nasi Goreng</span><span>27.750</span></div>
+              <div class="tc-row"><span>Es Teh Manis</span><span>5.550</span></div>
+              <div class="tc-total">
+                <span style="font-size:10.5px;color:var(--muted)">3 item</span>
+                <b>Rp 61.050</b>
+                <div class="tc-btn">Bayar</div>
+              </div>
             </div>
           </div>
 
@@ -522,6 +640,13 @@
 
           <!-- 4. Berhasil -->
           <div class="scene scene-done" data-scene="3" data-bar="Selesai" data-tag="Meja A-04">
+            <div class="notif-pop">
+              <span class="notif-ico">🔔</span>
+              <div>
+                <b>Pesanan kamu siap! 🎉</b>
+                <em>Selamat menikmati — #A1B2C3</em>
+              </div>
+            </div>
             <div class="tick">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m4 12 6 6L20 6"/></svg>
             </div>
@@ -536,6 +661,13 @@
 
           <!-- Chef — menggerakkan status pesanan -->
           <div class="scene scene-chef" data-scene="4" data-bar="Pesanan Masuk" data-tag="Chef">
+            <div class="notif-pop">
+              <span class="notif-ico">🔔</span>
+              <div>
+                <b>Pesanan baru masuk</b>
+                <em>Meja A-04 · 3 item</em>
+              </div>
+            </div>
             <div class="scene-title">Antrean dapur</div>
 
             <div class="mock-card chef-card is-moving">
@@ -564,8 +696,50 @@
             <div class="note-strip">Sekali tap: Baru &rarr; Dimasak &rarr; Siap</div>
           </div>
 
+
+          <!-- Kasir — setor tunai, menunggu konfirmasi -->
+          <div class="scene scene-setor" data-scene="5" data-bar="Setor Saldo Cash" data-tag="Kasir">
+            <div class="cash-hero">
+              <span>Tunai di Laci</span>
+              <b>Rp 1.240.000</b>
+            </div>
+            <div class="mock-card" style="margin-top:10px">
+              <div class="mock-row">
+                <span class="mock-name">Rp 800.000</span>
+                <span class="st st-cook">Pending</span>
+              </div>
+              <div class="chef-items"><span>BCA · 1234567890 · a.n. Kaata Resto</span></div>
+              <div class="proof-strip">
+                <span class="proof-ico">📎</span>
+                <span>bukti-transfer.jpg</span>
+              </div>
+            </div>
+            <div class="note-strip">Uang keluar dari laci, ditahan di GL Suspense</div>
+          </div>
+
+          <!-- Finance — konfirmasi setoran -->
+          <div class="scene scene-konfirmasi" data-scene="6" data-bar="Konfirmasi Setoran" data-tag="Finance">
+            <div class="warn-box">
+              <span class="warn-ico">!</span>
+              <span>Pastikan nominal di Saldo Rekening sudah sesuai: <b>Rp 800.000</b></span>
+            </div>
+            <div class="flowline">
+              <div class="flow-node">GL Suspense</div>
+              <div class="flow-arrow">→</div>
+              <div class="flow-node is-target">GL Total Saldo</div>
+            </div>
+            <div class="mock-card">
+              <div class="mock-row">
+                <span class="mock-name">Rp 800.000</span>
+                <span class="st st-ready">Completed</span>
+              </div>
+              <div class="chef-items"><span>Dikonfirmasi oleh finance@kaata.id</span></div>
+            </div>
+            <div class="note-strip is-ok">Baru setelah dikonfirmasi, uangnya masuk pembukuan</div>
+          </div>
+
           <!-- Admin — kelola produk & harga -->
-          <div class="scene scene-admin" data-scene="5" data-bar="Kelola Produk" data-tag="Admin">
+          <div class="scene scene-admin" data-scene="7" data-bar="Kelola Produk" data-tag="Admin">
             <div class="scene-title">Menu &amp; harga</div>
             <div class="mock-card">
               <div class="mock-row">
@@ -604,7 +778,7 @@
           </div>
 
           <!-- Finance — saldo pendapatan -->
-          <div class="scene scene-saldo" data-scene="6" data-bar="Saldo &amp; Pendapatan" data-tag="Finance">
+          <div class="scene scene-saldo" data-scene="8" data-bar="Saldo &amp; Pendapatan" data-tag="Finance">
             <div class="scene-title">Saldo penghasilan</div>
             <div class="saldo-hero">
               <span>Total hari ini</span>
@@ -633,7 +807,7 @@
           </div>
 
           <!-- Finance — jurnal GL -->
-          <div class="scene scene-finance" data-scene="7" data-bar="Jurnal GL" data-tag="Finance">
+          <div class="scene scene-finance" data-scene="9" data-bar="Jurnal GL" data-tag="Finance">
             <div class="saldo-row">
               <div class="saldo"><span>Penghasilan</span><b>64.103</b></div>
               <div class="saldo"><span>Petty Cash</span><b>250.000</b></div>
@@ -677,11 +851,13 @@
         <p class="demo-step" data-step="2">Bayar QRIS tanpa memanggil pelayan</p>
         <p class="demo-step" data-step="3">Lunas, dapur jalan, pembukuan beres</p>
         <p class="demo-step" data-step="4">Dapur menggerakkan status pesanan sekali tap</p>
-        <p class="demo-step" data-step="5">Admin cukup isi harga bersih, PPN dihitung sendiri</p>
-        <p class="demo-step" data-step="6">Pendapatan terpisah rapi per metode bayar</p>
-        <p class="demo-step" data-step="7">Finance terima jurnal yang sudah seimbang</p>
+        <p class="demo-step" data-step="5">Kasir setor tunai, lengkap dengan bukti transfernya</p>
+        <p class="demo-step" data-step="6">Finance mengonfirmasi setelah uangnya benar-benar masuk</p>
+        <p class="demo-step" data-step="7">Admin cukup isi harga bersih, PPN dihitung sendiri</p>
+        <p class="demo-step" data-step="8">Pendapatan terpisah rapi per metode bayar</p>
+        <p class="demo-step" data-step="9">Finance terima jurnal yang sudah seimbang</p>
         <div class="dots">
-          <span class="dot-i is-on"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span>
+          <span class="dot-i is-on"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span>
         </div>
       </div>
     </div>
@@ -731,6 +907,31 @@
         <h3>PPN & service otomatis</h3>
         <p>Cukup atur tarifnya sekali. Harga menu tampil sudah termasuk PPN,
            biaya service ditambahkan hanya untuk Dine In.</p>
+      </div>
+
+
+      <div class="card">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18"/><path d="M5 21V8l7-5 7 5v13"/><path d="M9 21v-6h6v6"/></svg></div>
+        <h3>Setoran kas berjenjang</h3>
+        <p>Kasir menyetor tunai berikut foto buktinya; Finance mengonfirmasi
+           setelah uangnya benar-benar terlihat di rekening. Selama menunggu,
+           nilainya ditahan di akun suspense — bukan diakui lebih dulu.</p>
+      </div>
+
+      <div class="card">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></div>
+        <h3>Kas kecil dengan persetujuan</h3>
+        <p>Kasir mengajukan top up saat kehabisan kembalian, Finance yang
+           menyetujui. Setiap pengajuan berdiri sendiri, jadi menyetujui satu
+           tidak ikut melepas yang lain.</p>
+      </div>
+
+      <div class="card">
+        <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg></div>
+        <h3>Notifikasi ke dapur & customer</h3>
+        <p>Dapur berbunyi begitu pesanan masuk; customer diberi tahu saat
+           pesanannya mulai dimasak dan saat siap. Nada deringnya khas, jadi
+           kedengaran tanpa harus melihat layar.</p>
       </div>
 
       <div class="card">
@@ -1076,7 +1277,7 @@
     var barTitle = document.getElementById("bar-title");
     var barTag   = document.getElementById("bar-tag");
 
-    var SCENE_MS = 2400;
+    var SCENE_MS = 2300;
     var current = -1;
     var timer = null;
 
@@ -1123,6 +1324,29 @@
     document.addEventListener("visibilitychange", function(){
       document.hidden ? stop() : play();
     });
+
+    // ── Mode perangkat ─────────────────────────────────────────────
+    // Aplikasinya memang berperilaku beda di layar lebar — keranjang
+    // pindah jadi panel samping — dan itu justru salah satu hal yang
+    // ingin ditunjukkan ke pemilik resto yang memakai tablet di kasir.
+    var frame = document.getElementById("device-frame");
+    var btnHp = document.getElementById("mode-hp");
+    var btnTab = document.getElementById("mode-tab");
+
+    function setMode(tablet){
+      frame.classList.toggle("is-tablet", tablet);
+      btnTab.classList.toggle("is-on", tablet);
+      btnHp.classList.toggle("is-on", !tablet);
+      btnTab.setAttribute("aria-pressed", tablet ? "true" : "false");
+      btnHp.setAttribute("aria-pressed", tablet ? "false" : "true");
+      // Kembali ke adegan menu: cuma di situ bedanya kelihatan.
+      if(tablet){ show(0); restart() }
+    }
+    if(frame && btnHp && btnTab){
+      btnHp.addEventListener("click", function(){ setMode(false) });
+      btnTab.addEventListener("click", function(){ setMode(true) });
+      setMode(false);
+    }
 
     // Titik-titiknya sekalian jadi kendali manual, buat yang ingin
     // berlama-lama di satu adegan.
