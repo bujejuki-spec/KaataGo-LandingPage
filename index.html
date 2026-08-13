@@ -155,6 +155,107 @@
   .mock-bar-cta{margin-left:auto;background:var(--brand);color:#fff;font-weight:800;font-size:12.5px;padding:7px 15px;border-radius:999px}
   .mock-bar.is-primary{justify-content:center}
 
+
+  /* scene — lokasi resto di HP customer */
+  .scene-lokasi{display:flex;flex-direction:column}
+  .map-box{
+    position:relative;height:150px;border-radius:14px;overflow:hidden;
+    border:1px solid var(--line);
+    background:
+      linear-gradient(#EEF0FA,#E5E8F6);
+  }
+  /* Jalan-jalan palsu: cukup untuk terbaca sebagai peta tanpa memuat
+     petak peta sungguhan, yang berarti permintaan ke server pihak lain
+     dari halaman yang seharusnya berdiri sendiri. */
+  .map-box::before,.map-box::after{
+    content:"";position:absolute;background:#fff;
+  }
+  .map-box::before{left:-10%;right:-10%;top:52%;height:13px;transform:rotate(-7deg)}
+  .map-box::after{top:-10%;bottom:-10%;left:32%;width:11px;transform:rotate(9deg)}
+  .map-pin{
+    position:absolute;left:50%;top:46%;transform:translate(-50%,-100%);
+    width:26px;height:26px;border-radius:50% 50% 50% 0;
+    background:var(--brand);rotate:-45deg;
+    box-shadow:0 6px 14px rgba(79,70,229,.4);
+  }
+  .map-pin span{
+    position:absolute;inset:6px;border-radius:50%;background:#fff;rotate:45deg;
+  }
+  .scene-lokasi.is-active .map-pin{animation:pin-drop .6s cubic-bezier(.34,1.56,.64,1)}
+  @keyframes pin-drop{
+    0%{opacity:0;transform:translate(-50%,-190%)}
+    100%{opacity:1;transform:translate(-50%,-100%)}
+  }
+  /* Lingkaran yang melebar dari kaki pin — "ini posisimu sekarang". */
+  .map-ping{
+    position:absolute;left:50%;top:46%;width:14px;height:14px;margin:-7px 0 0 -7px;
+    border-radius:50%;border:2px solid var(--brand);opacity:0;
+  }
+  .scene-lokasi.is-active .map-ping{animation:ping 2.1s ease-out .4s infinite}
+  @keyframes ping{
+    0%{transform:scale(.6);opacity:.7}
+    100%{transform:scale(4.2);opacity:0}
+  }
+  .loc-card{
+    margin-top:12px;background:#fff;border:1px solid var(--line);border-radius:14px;
+    padding:12px 14px;
+  }
+  .loc-name{font-size:14px;font-weight:800}
+  .loc-addr{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.45}
+  .loc-maps{
+    margin-top:11px;display:flex;align-items:center;justify-content:center;gap:7px;
+    background:var(--brand);color:#fff;font-weight:800;font-size:12.5px;
+    padding:9px 14px;border-radius:999px;
+  }
+  .loc-maps svg{width:15px;height:15px}
+  .scene-lokasi.is-active .loc-maps{animation:tap-press 2.2s ease .9s infinite}
+  @keyframes tap-press{
+    0%,72%,100%{transform:none;box-shadow:none}
+    80%{transform:scale(.955);box-shadow:0 0 0 6px rgba(79,70,229,.16)}
+    90%{transform:none;box-shadow:0 0 0 12px rgba(79,70,229,0)}
+  }
+
+  /* scene — kartu QR Meja, bentuknya sama dengan yang dicetak resto */
+  .scene-qrmeja{display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .qr-card{
+    position:relative;width:196px;padding:14px;border-radius:16px;
+    background:linear-gradient(135deg,var(--brand),var(--brand-dark));
+    box-shadow:0 14px 30px rgba(79,70,229,.32);
+  }
+  /* Siku amber di keempat pojok — penanda merek yang tetap terbaca
+     walau kartunya dicetak hitam putih. */
+  .qr-card i{position:absolute;background:#F59E0B;border-radius:2px}
+  .qr-card i:nth-child(1){left:7px;top:7px;width:20px;height:2.5px}
+  .qr-card i:nth-child(2){left:7px;top:7px;width:2.5px;height:20px}
+  .qr-card i:nth-child(3){right:7px;top:7px;width:20px;height:2.5px}
+  .qr-card i:nth-child(4){right:7px;top:7px;width:2.5px;height:20px}
+  .qr-card i:nth-child(5){left:7px;bottom:7px;width:20px;height:2.5px}
+  .qr-card i:nth-child(6){left:7px;bottom:7px;width:2.5px;height:20px}
+  .qr-card i:nth-child(7){right:7px;bottom:7px;width:20px;height:2.5px}
+  .qr-card i:nth-child(8){right:7px;bottom:7px;width:2.5px;height:20px}
+  .qr-brand{
+    display:flex;align-items:center;justify-content:center;gap:5px;
+    color:#fff;font-weight:800;font-size:12.5px;letter-spacing:.02em;
+  }
+  .qr-brand img{width:15px;height:15px;border-radius:4px}
+  .qr-kicker{
+    text-align:center;color:#F59E0B;font-size:7px;letter-spacing:.16em;
+    text-transform:uppercase;margin-top:2px;
+  }
+  .qr-inner{
+    margin-top:9px;background:#fff;border-radius:12px;padding:11px 10px;text-align:center;
+  }
+  .qr-resto{font-size:11.5px;font-weight:800}
+  .qr-sub{font-size:8px;color:var(--muted);margin-bottom:7px}
+  .qr-inner .qr{width:108px;height:108px;margin:0 auto}
+  .qr-inner .qr rect{fill:var(--brand-dark)}
+  .qr-meja{
+    display:inline-block;margin-top:8px;background:#F59E0B;color:#fff;
+    font-weight:800;font-size:12px;padding:4px 14px;border-radius:999px;
+  }
+  .qr-foot{margin-top:9px;text-align:center;color:rgba(255,255,255,.85);font-size:8.5px}
+  .scene-qrmeja.is-active .qr-card{animation:pop .5s cubic-bezier(.34,1.56,.64,1)}
+
   /* scene 3 — QR */
   .scene-pay{display:flex;flex-direction:column;align-items:center;justify-content:center}
   .qr-wrap{
@@ -561,7 +662,40 @@
 
         <div class="phone-screen">
           <!-- 1. Pilih menu -->
-          <div class="scene scene-menu is-active" data-scene="0" data-bar="Meja A-04" data-tag="Kaata Resto">
+          <!-- Lokasi resto -->
+          <div class="scene scene-lokasi is-active" data-bar="Kaata Resto" data-tag="Lokasi" data-scene="0">
+            <div class="scene-title">Cari resto terdekat</div>
+            <div class="map-box">
+              <div class="map-ping"></div>
+              <div class="map-pin"><span></span></div>
+            </div>
+            <div class="loc-card">
+              <div class="loc-name">Kaata Resto &mdash; Cabang Dago</div>
+              <div class="loc-addr">Jl. Ir. H. Juanda No. 128, Dago, Bandung</div>
+              <div class="loc-maps">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.2 7-11a7 7 0 1 0-14 0c0 4.8 7 11 7 11Z"/><circle cx="12" cy="10" r="2.6"/></svg>
+                Buka di Google Maps
+              </div>
+            </div>
+          </div>
+
+          <!-- QR Meja -->
+          <div class="scene scene-qrmeja" data-bar="QR Meja" data-tag="Admin" data-scene="1">
+            <div class="qr-card">
+              <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+              <div class="qr-brand"><img src="kaata-icon.png" alt="">KaataGo</div>
+              <div class="qr-kicker">Pesan sendiri dari meja</div>
+              <div class="qr-inner">
+                <div class="qr-resto">Kaata Resto</div>
+                <div class="qr-sub">Scan untuk pesan dari meja ini</div>
+                <svg class="qr" viewBox="0 0 21 21" shape-rendering="crispEdges" role="img" aria-label="Contoh kode QR meja"></svg>
+                <div class="qr-meja">MEJA A-04</div>
+              </div>
+              <div class="qr-foot">Arahkan kamera HP ke kode di atas</div>
+            </div>
+          </div>
+
+          <div class="scene scene-menu" data-bar="Meja A-04" data-tag="Kaata Resto" data-scene="2">
             <div class="menu-col">
             <div class="mock-card">
               <div class="mock-row">
@@ -606,7 +740,7 @@
           </div>
 
           <!-- 2. Keranjang -->
-          <div class="scene" data-scene="1" data-bar="Keranjang" data-tag="Meja A-04">
+          <div class="scene" data-bar="Keranjang" data-tag="Meja A-04" data-scene="3">
             <div class="scene-title">Keranjang</div>
             <div class="mock-card">
               <div class="mock-row">
@@ -635,7 +769,7 @@
           </div>
 
           <!-- 3. Bayar QRIS -->
-          <div class="scene scene-pay" data-scene="2" data-bar="Pembayaran" data-tag="Meja A-04">
+          <div class="scene scene-pay" data-bar="Pembayaran" data-tag="Meja A-04" data-scene="4">
             <div class="scene-title">Scan untuk bayar</div>
             <div class="qr-wrap">
               <svg class="qr" viewBox="0 0 21 21" shape-rendering="crispEdges" role="img" aria-label="Contoh kode QR"></svg>
@@ -646,7 +780,7 @@
           </div>
 
           <!-- 4. Berhasil -->
-          <div class="scene scene-done" data-scene="3" data-bar="Selesai" data-tag="Meja A-04">
+          <div class="scene scene-done" data-bar="Selesai" data-tag="Meja A-04" data-scene="5">
             <div class="notif-pop">
               <span class="notif-ico">🔔</span>
               <div>
@@ -667,7 +801,7 @@
           </div>
 
           <!-- Chef — menggerakkan status pesanan -->
-          <div class="scene scene-chef" data-scene="4" data-bar="Pesanan Masuk" data-tag="Chef">
+          <div class="scene scene-chef" data-bar="Pesanan Masuk" data-tag="Chef" data-scene="6">
             <div class="notif-pop">
               <span class="notif-ico">🔔</span>
               <div>
@@ -705,7 +839,7 @@
 
 
           <!-- Kasir — setor tunai, menunggu konfirmasi -->
-          <div class="scene scene-setor" data-scene="5" data-bar="Setor Saldo Cash" data-tag="Kasir">
+          <div class="scene scene-setor" data-bar="Setor Saldo Cash" data-tag="Kasir" data-scene="7">
             <div class="cash-hero">
               <span>Tunai di Laci</span>
               <b>Rp 1.240.000</b>
@@ -725,7 +859,7 @@
           </div>
 
           <!-- Finance — konfirmasi setoran -->
-          <div class="scene scene-konfirmasi" data-scene="6" data-bar="Konfirmasi Setoran" data-tag="Finance">
+          <div class="scene scene-konfirmasi" data-bar="Konfirmasi Setoran" data-tag="Finance" data-scene="8">
             <div class="warn-box">
               <span class="warn-ico">!</span>
               <span>Pastikan nominal di Saldo Rekening sudah sesuai: <b>Rp 800.000</b></span>
@@ -746,7 +880,7 @@
           </div>
 
           <!-- Admin — kelola produk & harga -->
-          <div class="scene scene-admin" data-scene="7" data-bar="Kelola Produk" data-tag="Admin">
+          <div class="scene scene-admin" data-bar="Kelola Produk" data-tag="Admin" data-scene="9">
             <div class="scene-title">Menu &amp; harga</div>
             <div class="mock-card">
               <div class="mock-row">
@@ -785,7 +919,7 @@
           </div>
 
           <!-- Finance — saldo pendapatan -->
-          <div class="scene scene-saldo" data-scene="8" data-bar="Saldo &amp; Pendapatan" data-tag="Finance">
+          <div class="scene scene-saldo" data-bar="Saldo &amp; Pendapatan" data-tag="Finance" data-scene="10">
             <div class="scene-title">Saldo penghasilan</div>
             <div class="saldo-hero">
               <span>Total hari ini</span>
@@ -814,7 +948,7 @@
           </div>
 
           <!-- Finance — jurnal GL -->
-          <div class="scene scene-finance" data-scene="9" data-bar="Jurnal GL" data-tag="Finance">
+          <div class="scene scene-finance" data-bar="Jurnal GL" data-tag="Finance" data-scene="11">
             <div class="saldo-row">
               <div class="saldo"><span>Penghasilan</span><b>64.103</b></div>
               <div class="saldo"><span>Petty Cash</span><b>250.000</b></div>
@@ -853,18 +987,20 @@
       </div>
 
       <div class="demo-caption">
-        <p class="demo-step" data-step="0">Customer pilih menu langsung dari HP-nya</p>
-        <p class="demo-step" data-step="1">Satu menu, dua level pedas — tetap terpisah</p>
-        <p class="demo-step" data-step="2">Bayar QRIS tanpa memanggil pelayan</p>
-        <p class="demo-step" data-step="3">Lunas, dapur jalan, pembukuan beres</p>
-        <p class="demo-step" data-step="4">Dapur menggerakkan status pesanan sekali tap</p>
-        <p class="demo-step" data-step="5">Kasir setor tunai, lengkap dengan bukti transfernya</p>
-        <p class="demo-step" data-step="6">Finance mengonfirmasi setelah uangnya benar-benar masuk</p>
-        <p class="demo-step" data-step="7">Admin cukup isi harga bersih, PPN dihitung sendiri</p>
-        <p class="demo-step" data-step="8">Pendapatan terpisah rapi per metode bayar</p>
-        <p class="demo-step" data-step="9">Finance terima jurnal yang sudah seimbang</p>
+        <p class="demo-step is-active" data-step="0">Customer temukan resto, sekali tap buka Google Maps</p>
+        <p class="demo-step" data-step="1">QR meja bergaya KaataGo, dicetak sendiri oleh resto</p>
+        <p class="demo-step" data-step="2">Customer pilih menu langsung dari HP-nya</p>
+        <p class="demo-step" data-step="3">Satu menu, dua level pedas — tetap terpisah</p>
+        <p class="demo-step" data-step="4">Bayar QRIS tanpa memanggil pelayan</p>
+        <p class="demo-step" data-step="5">Lunas, dapur jalan, pembukuan beres</p>
+        <p class="demo-step" data-step="6">Dapur menggerakkan status pesanan sekali tap</p>
+        <p class="demo-step" data-step="7">Kasir setor tunai, lengkap dengan bukti transfernya</p>
+        <p class="demo-step" data-step="8">Finance mengonfirmasi setelah uangnya benar-benar masuk</p>
+        <p class="demo-step" data-step="9">Admin cukup isi harga bersih, PPN dihitung sendiri</p>
+        <p class="demo-step" data-step="10">Pendapatan terpisah rapi per metode bayar</p>
+        <p class="demo-step" data-step="11">Finance terima jurnal yang sudah seimbang</p>
         <div class="dots">
-          <span class="dot-i is-on"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span>
+          <span class="dot-i is-on"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span><span class="dot-i"></span>
         </div>
       </div>
     </div>
@@ -1242,8 +1378,8 @@
   // justru berbahaya di halaman promosi — orang bisa saja memindainya dan
   // mengira itu tautan pembayaran betulan.
   (function drawQr(){
-    var svg = document.querySelector(".qr");
-    if(!svg) return;
+    var svgs = [].slice.call(document.querySelectorAll(".qr"));
+    if(!svgs.length) return;
     var N = 21, seed = 20260811, out = "";
 
     function rnd(){ seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; }
@@ -1266,7 +1402,11 @@
       if(isFinder(x,y)) continue;
       if(rnd() > .52) out += '<rect x="'+x+'" y="'+y+'" width="1" height="1"/>';
     }
-    svg.innerHTML = out;
+    // Semua .qr diisi pola yang sama: kartu QR Meja dan layar bayar
+    // memang menampilkan kode yang berbeda di aplikasinya, tapi di sini
+    // keduanya sama-sama hiasan, dan menggambar dua pola berbeda cuma
+    // menambah kode tanpa menambah apa pun yang terlihat.
+    svgs.forEach(function(svg){ svg.innerHTML = out });
   })();
 
   // ── Demo HP yang berjalan sendiri ─────────────────────────────────────
@@ -1346,8 +1486,9 @@
       btnHp.classList.toggle("is-on", !tablet);
       btnTab.setAttribute("aria-pressed", tablet ? "true" : "false");
       btnHp.setAttribute("aria-pressed", tablet ? "false" : "true");
-      // Kembali ke adegan menu: cuma di situ bedanya kelihatan.
-      if(tablet){ show(0); restart() }
+      // Lompat ke adegan menu — indeks 2 sejak lokasi dan QR meja ada di
+      // depannya — karena cuma di situ bedanya HP dan tablet kelihatan.
+      if(tablet){ show(2); restart() }
     }
     if(frame && btnHp && btnTab){
       btnHp.addEventListener("click", function(){ setMode(false) });
