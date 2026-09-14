@@ -548,14 +548,13 @@
   }
   .paket .lencana.basic{background:rgba(245,158,11,.14);color:#92400E}
   .paket .lencana.premium{background:rgba(16,185,129,.14);color:#065F46}
-  .paket h3{margin:0 0 6px;font-size:20px;letter-spacing:-.01em}
-  .paket .harga{font-size:30px;font-weight:800;letter-spacing:-.02em;margin:0 0 2px}
-  .paket .satuan{color:var(--muted);font-size:13.5px;margin:0 0 14px}
-  .paket .ket{color:var(--muted);font-size:14.5px;margin:0}
-  .paket-catatan{
-    margin:22px 0 0;color:var(--muted);font-size:14px;max-width:760px;
-    padding:14px 16px;border:1px dashed var(--line);border-radius:14px;background:var(--card);
-  }
+  /* Jarak antarbarisnya mengikuti eratnya hubungan, bukan dibuat sama
+     rata. Harga dan satuannya satu tarikan napas — 4px. Keterangannya
+     kalimat tersendiri, jadi diberi jarak sebesar jarak antarblok di
+     kartu fitur — 16px. */
+  .paket .harga{font-size:30px;font-weight:800;letter-spacing:-.02em;margin:0 0 4px}
+  .paket .satuan{color:var(--muted);font-size:13.5px;margin:0 0 16px}
+  .paket .ket{color:var(--muted);font-size:14.5px;line-height:1.55;margin:0}
   .paket-memuat{color:var(--muted);font-size:14.5px}
 
   /* roles */
@@ -1360,12 +1359,6 @@
       <p class="paket-memuat">Memuat harga terbaru…</p>
     </div>
 
-    <p class="paket-catatan">
-      Halaman ini cuma memajang harganya. Berlangganan dilakukan dari
-      <b>aplikasi KaataGo di HP</b> atau <b>KaataGo Web</b>, supaya
-      paketnya menempel ke merchant yang benar dan pembayarannya tercatat
-      atas nama yang tepat.
-    </p>
   </div>
 </section>
 
