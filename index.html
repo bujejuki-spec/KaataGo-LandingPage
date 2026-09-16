@@ -535,27 +535,73 @@
   .card p{margin:0;color:var(--muted);font-size:14.5px}
 
   /* paket langganan — dipajang, bukan dijual dari sini */
-  .paket-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px;max-width:760px}
+  .paket-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px;max-width:820px}
   @media (max-width:720px){ .paket-grid{grid-template-columns:1fr} }
+
+  /* Kartu harga berdiri lebih tegas daripada kartu fitur.
+     Ia satu-satunya tempat di halaman ini tempat orang memutuskan
+     sesuatu, jadi ia boleh terlihat seperti tempat keputusan. */
   .paket{
-    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);
-    padding:26px 24px;display:flex;flex-direction:column;
+    position:relative;background:var(--card);border:1px solid var(--line);
+    border-radius:22px;padding:30px 26px 28px;display:flex;flex-direction:column;
+    transition:transform .16s ease, box-shadow .16s ease, border-color .16s ease;
   }
-  .paket.is-utama{border-color:var(--brand);box-shadow:0 14px 32px rgba(79,70,229,.10)}
+  .paket:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(20,21,42,.10)}
+
+  /* Premium dibedakan dengan cincin dan dasar yang sedikit berwarna,
+     bukan dengan tulisan "disarankan" — mata menangkapnya lebih dulu
+     daripada kata. */
+  .paket.is-utama{
+    border-color:transparent;
+    background:
+      linear-gradient(var(--card),var(--card)) padding-box,
+      linear-gradient(135deg,var(--brand),#7C3AED 55%,#0EA5E9) border-box;
+    border:2px solid transparent;
+    box-shadow:0 18px 44px rgba(79,70,229,.16);
+  }
+  .paket.is-utama:hover{box-shadow:0 24px 54px rgba(79,70,229,.22)}
+
+  /* Pita sudut untuk yang paling lengkap. */
+  .paket .tanda{
+    position:absolute;top:-1px;right:22px;transform:translateY(-50%);
+    background:linear-gradient(135deg,var(--brand),#7C3AED);color:#fff;
+    font-size:10.5px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;
+    padding:6px 12px;border-radius:999px;box-shadow:0 6px 16px rgba(79,70,229,.35);
+    white-space:nowrap;
+  }
+
   .paket .lencana{
     align-self:flex-start;font-size:11.5px;font-weight:800;letter-spacing:.06em;
-    text-transform:uppercase;padding:5px 10px;border-radius:999px;margin-bottom:14px;
+    text-transform:uppercase;padding:5px 11px;border-radius:999px;margin:0 0 16px;
   }
-  .paket .lencana.basic{background:rgba(245,158,11,.14);color:#92400E}
-  .paket .lencana.premium{background:rgba(16,185,129,.14);color:#065F46}
-  /* Jarak antarbarisnya mengikuti eratnya hubungan, bukan dibuat sama
-     rata. Harga dan satuannya satu tarikan napas — 4px. Keterangannya
-     kalimat tersendiri, jadi diberi jarak sebesar jarak antarblok di
-     kartu fitur — 16px. */
-  .paket .harga{font-size:30px;font-weight:800;letter-spacing:-.02em;margin:0 0 4px}
-  .paket .satuan{color:var(--muted);font-size:13.5px;margin:0 0 16px}
-  .paket .ket{color:var(--muted);font-size:14.5px;line-height:1.55;margin:0}
+  .paket .lencana.basic{background:rgba(245,158,11,.16);color:#92400E}
+  .paket .lencana.premium{background:rgba(79,70,229,.12);color:var(--brand-dark)}
+
+  /* Harganya satu baris, bukan tiga.
+     "Rp" dan "/bulan" sengaja lebih kecil dan lebih redup: yang dicari
+     mata adalah angkanya, dan dua penyertanya cuma membuatnya terbaca
+     benar. */
+  .paket .baris-harga{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+  .paket .mata{font-size:19px;font-weight:700;color:var(--muted)}
+  .paket .angka{font-size:clamp(34px,5vw,42px);font-weight:800;letter-spacing:-.03em;line-height:1}
+  .paket .per{font-size:14px;color:var(--muted);font-weight:600}
+  .paket .satuan{color:var(--muted);font-size:13px;margin:8px 0 0}
+
+  .paket .pisah{height:1px;background:var(--line);margin:20px 0 18px}
+  .paket .ket{color:var(--muted);font-size:14.5px;line-height:1.6;margin:0 0 20px}
+
+  /* Bukan tombol: halaman ini memajang, tidak menjual. Barisnya
+     menyebut di mana berlangganan benar-benar dilakukan. */
+  .paket .jalan{
+    margin-top:auto;display:flex;align-items:center;gap:8px;
+    font-size:13px;font-weight:600;color:var(--brand-dark);
+  }
+  .paket .jalan svg{width:15px;height:15px;flex:none}
+
   .paket-memuat{color:var(--muted);font-size:14.5px}
+
+  /* Harga termurah ikut disebut di judul, diisi dari basis data. */
+  .harga-mulai{font-weight:800;color:var(--ink)}
 
   /* roles */
   .roles{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
@@ -1361,9 +1407,11 @@
   <div class="wrap">
     <div class="sec-head">
       <p class="kicker">Paket &amp; harga</p>
-      <h2>Dua paket, harganya jelas di depan</h2>
-      <p>Coba dulu gratis selama masa percobaan. Kalau cocok, pilih paketnya
-         dari dalam aplikasi.</p>
+      <h2>Resto rapi, mulai <span class="harga-mulai" id="harga-mulai">dari
+          harga sekali belanja galon</span></h2>
+      <p>Gratis dulu selama masa percobaan — tanpa kartu kredit, tanpa biaya
+         pasang. Kalau cocok, pilih paketnya dari dalam aplikasi, dan naik
+         atau turun paket kapan saja.</p>
     </div>
 
     <div class="paket-grid" id="paket-grid">
@@ -1852,15 +1900,37 @@
 
       function gambar(daftar){
         if(!daftar || !daftar.length) return gagal();
+
+        // Harga termurah disebut di judul, diambil dari data yang sama.
+        // Diketik di HTML, angka itu akan benar hari ini dan diam-diam
+        // keliru pada hari harganya naik.
+        var murah = daftar.reduce(function(a, b){
+          return Number(b.harga_bulanan) < Number(a.harga_bulanan) ? b : a;
+        });
+        var judul = document.getElementById("harga-mulai");
+        if(judul) judul.textContent = rupiah(murah.harga_bulanan) + " sebulan";
+
         kotak.innerHTML = daftar.map(function(p){
           var premium = (p.kode || "").toLowerCase() === "premium";
           return '<div class="paket' + (premium ? " is-utama" : "") + '">' +
+                   (premium ? '<span class="tanda">Paling lengkap</span>' : '') +
                    '<span class="lencana ' + (premium ? "premium" : "basic") + '">' +
                      aman(p.nama) +
                    '</span>' +
-                   '<p class="harga">' + rupiah(p.harga_bulanan) + '</p>' +
-                   '<p class="satuan">per bulan, per merchant</p>' +
+                   '<div class="baris-harga">' +
+                     '<span class="mata">Rp</span>' +
+                     '<span class="angka">' +
+                       Number(p.harga_bulanan || 0).toLocaleString("id-ID") +
+                     '</span>' +
+                     '<span class="per">/bulan</span>' +
+                   '</div>' +
+                   '<p class="satuan">per merchant, tanpa biaya pasang</p>' +
+                   '<div class="pisah"></div>' +
                    '<p class="ket">' + aman(p.keterangan) + '</p>' +
+                   '<div class="jalan">' +
+                     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>' +
+                     'Dipilih dari dalam aplikasi' +
+                   '</div>' +
                  '</div>';
         }).join("");
       }
